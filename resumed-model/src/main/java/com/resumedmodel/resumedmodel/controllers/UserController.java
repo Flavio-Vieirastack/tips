@@ -5,6 +5,9 @@ import com.resumedmodel.resumedmodel.models.Foo;
 import com.resumedmodel.resumedmodel.models.FooBar;
 import com.resumedmodel.resumedmodel.models.FooBarLong;
 import com.resumedmodel.resumedmodel.models.UserModel;
+import com.resumedmodel.resumedmodel.repositories.FooBarLongRepository;
+import com.resumedmodel.resumedmodel.repositories.FooBarRepository;
+import com.resumedmodel.resumedmodel.repositories.FooRepository;
 import com.resumedmodel.resumedmodel.repositories.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,15 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private FooRepository fooRepository;
+
+    @Autowired
+    private FooBarRepository fooBarRepository;
+
+    @Autowired
+    private FooBarLongRepository fooBarLongRepository;
 
     @GetMapping
     public ResponseEntity<List<UserModel>> getAll() {
@@ -65,14 +77,14 @@ public class UserController {
         while (i < 50) {
             i++;
             var faker = new Faker();
-            foos.add(new Foo(
+            var foo = new Foo(
                     faker.music().instrument(),
                     faker.zelda().game(),
                     faker.zelda().character(),
                     faker.zelda().game(),
-                    faker.zelda().character()
+                    faker.zelda().character());
+            foos.add(fooRepository.save(foo));
 
-            ));
         }
         return foos;
     }
@@ -82,7 +94,7 @@ public class UserController {
         while (i < 50) {
             i++;
             var faker = new Faker();
-            foos.add(new FooBar(
+            var fooBar = new FooBar(
                     faker.music().instrument(),
                     faker.zelda().game(),
                     faker.zelda().character(),
@@ -90,7 +102,8 @@ public class UserController {
                     faker.zelda().character(),
                     new HashSet<>(faker.lorem().words())
 
-            ));
+            );
+            foos.add(fooBarRepository.save(fooBar));
         }
         return foos;
     }
@@ -100,7 +113,7 @@ public class UserController {
         while (i < 50) {
             i++;
             var faker = new Faker();
-            foos.add(new FooBarLong(
+            var foobarLong = new FooBarLong(
                     faker.music().instrument(),
                     faker.zelda().game(),
                     faker.zelda().character(),
@@ -115,7 +128,8 @@ public class UserController {
                     new HashSet<>(faker.lorem().words()),
                     new HashSet<>(faker.lorem().words())
 
-            ));
+            );
+            foos.add(fooBarLongRepository.save(foobarLong));
         }
         return foos;
     }
