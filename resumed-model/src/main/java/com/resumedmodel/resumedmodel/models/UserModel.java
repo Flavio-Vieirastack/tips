@@ -1,5 +1,8 @@
 package com.resumedmodel.resumedmodel.models;
 
+import com.resumedmodel.resumedmodel.models.DTO.UserDTO;
+import com.resumedmodel.resumedmodel.utils.ApiObjectMapper;
+import com.resumedmodel.resumedmodel.utils.ResumedModel;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +12,7 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-public class UserModel {
+public class UserModel implements ResumedModel<UserDTO> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -35,5 +38,10 @@ public class UserModel {
         this.foo = foo;
         this.fooBars = fooBars;
         this.fooBarLongs = fooBarLongs;
+    }
+
+    @Override
+    public UserDTO resume(ApiObjectMapper<UserDTO> apiObjectMapper) {
+        return apiObjectMapper.convert(this, UserDTO.class);
     }
 }

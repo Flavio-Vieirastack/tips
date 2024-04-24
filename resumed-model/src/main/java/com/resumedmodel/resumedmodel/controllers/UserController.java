@@ -1,6 +1,7 @@
 package com.resumedmodel.resumedmodel.controllers;
 
 import com.github.javafaker.Faker;
+import com.resumedmodel.resumedmodel.models.DTO.UserDTO;
 import com.resumedmodel.resumedmodel.models.Foo;
 import com.resumedmodel.resumedmodel.models.FooBar;
 import com.resumedmodel.resumedmodel.models.FooBarLong;
@@ -9,6 +10,7 @@ import com.resumedmodel.resumedmodel.repositories.FooBarLongRepository;
 import com.resumedmodel.resumedmodel.repositories.FooBarRepository;
 import com.resumedmodel.resumedmodel.repositories.FooRepository;
 import com.resumedmodel.resumedmodel.repositories.UserRepository;
+import com.resumedmodel.resumedmodel.utils.ApiObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -42,10 +45,15 @@ public class UserController {
     @Autowired
     private FooBarLongRepository fooBarLongRepository;
 
+    @Autowired
+    private ApiObjectMapper<UserDTO> apiObjectMapper;
+
     @GetMapping
-    public ResponseEntity<List<UserModel>> getAll() {
-        return ResponseEntity.ok(userRepository.findAll());
-    }
+    public ResponseEntity<List<UserDTO>> getAll() {
+        return ResponseEntity.ok(userRepository.findAll().stream().map(
+                user -> user.resume(apiObjectMapper)
+        ).collect(Collectors.toList()));
+    } //200OK 866 ms 2.7 MB
 
     @GetMapping("{id}")
     public ResponseEntity<UserModel> findById(@PathVariable Long id) {
