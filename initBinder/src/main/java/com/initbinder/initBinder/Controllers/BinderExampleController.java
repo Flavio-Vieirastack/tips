@@ -1,12 +1,12 @@
 package com.initbinder.initBinder.Controllers;
 
-import com.initbinder.initBinder.User;
+import com.initbinder.initBinder.Users;
 import com.initbinder.initBinder.UserRepository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/users")
@@ -16,7 +16,12 @@ public class BinderExampleController {
     private UserRepository userRepository;
 
     @PostMapping
-    public User create(@RequestBody User user) {
-        return userRepository.save(user);
+    public Users create(@RequestBody Users users) {
+        return userRepository.save(users);
+    }
+
+    @GetMapping
+    public List<Users> findAll() {
+        return userRepository.findAll();
     }
 }
