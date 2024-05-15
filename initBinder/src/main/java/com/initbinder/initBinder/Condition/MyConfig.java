@@ -10,5 +10,6 @@ public class MyConfig {
     @Conditional(MyCondition.class)
     public MyBean bean() {
         return new MyBean();
+
     }
 }
